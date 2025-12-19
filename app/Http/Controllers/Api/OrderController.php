@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Log;
 
 class OrderController extends Controller
 {
@@ -31,9 +32,19 @@ class OrderController extends Controller
             'items.*.price' => 'required|numeric|min:0',
         ]);
 
-        $order = Order::create($request->all());
+        try {
+            $order = Order::create($request->all());
 
-        return response()->json($order, 201);
+            return response()->json($order, 201);
+
+        } catch (\Exception $e) {
+            Log::channel('errors')->error('Error al crear la orden: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'exception' => $e
+            ]);
+            
+            return response()->json(['error' => 'Error inteno al procesar la orden'], 500);
+        }
     }
 
     public function show(string $id): JsonResponse
