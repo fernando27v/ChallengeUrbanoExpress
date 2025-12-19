@@ -10,12 +10,22 @@ use Log;
 
 class OrderController extends Controller
 {
+    /**
+     * Listar Ordenes
+     * 
+     * Obtiene un listado de todas las ordenes registradas en el sistema.
+     */
     public function index(): JsonResponse
     {
         $orders = Order::all();
         return response()->json($orders);
     }
 
+    /**
+     * Crear Orden
+     * 
+     * Registra una nueva orden en el sistema.
+     */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -47,6 +57,11 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Obtener Orden
+     * 
+     * Muestra los detalles de una orden específica buscando por su ID.
+     */
     public function show(string $id): JsonResponse
     {
         $order = Order::find($id);
