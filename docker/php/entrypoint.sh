@@ -4,7 +4,13 @@ if [ ! -d "vendor" ]; then
     composer install
 fi
 
-# Esperar a que la base de datos esté lista
+if [ ! -f ".env" ]; then
+    echo "Creando archivo .env a partir del .env.example..."
+    cp .env.example .env
+    echo "Generando clave de aplicación..."
+    php artisan key:generate
+fi
+
 echo "Esperando a la base de datos..."
 sleep 10
 
